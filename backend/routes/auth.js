@@ -4,10 +4,11 @@ const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const fetchuser = require('../middleware/fetchuser');
 
 JWT_SECRET = 'aeroplaneshoe';
 
-//create a user using: POST "/api/auth/createuser". No Login required
+//ROUTE 1: create a user using: POST "/api/auth/createuser". No Login required
 
 router.post('/createuser',
     body('email').isEmail(),
@@ -41,7 +42,7 @@ router.post('/createuser',
                     id: user.id
                 }
             };
-            
+
             const authtoken = jwt.sign(data, JWT_SECRET);
 
             res.json({ authtoken });
@@ -56,7 +57,7 @@ router.post('/createuser',
 
     });
 
-//authenticate a user using: POST "/api/auth/login". No Login required
+//ROUTE 2: authenticate a user using: POST "/api/auth/login". No Login required
 
 router.post('/login',
     body('email').isEmail(),
@@ -69,7 +70,7 @@ router.post('/login',
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const {email, password} = req.body;
+        const { email, password } = req.body;
 
         try {
             //check whether the user with the same email exists already.
@@ -90,12 +91,25 @@ router.post('/login',
             };
 
             const authtoken = jwt.sign(data, JWT_SECRET);
-            res.json({authtoken});
+            res.json({ authtoken });
 
-        }catch (error) {
+        } catch (error) {
             console.log(error.message);
-            res.status(500).send( "Internal Server error");
+            res.status(500).send("Internal Server error");
         };
     });
+
+//ROUTE 3: getting logged in user details using: POST "/api/auth/getuser".Login required
+
+router.post('/getuser', fetchuser, async (req, res) => {
+    try {
+        userId = req.user.id;
+        const user = await User.findById(userId).select("-password");
+        res.send(user);
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal Server error");
+    }
+});
 
 module.exports = router;
