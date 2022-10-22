@@ -5,10 +5,10 @@ const Navbar = () => {
 
     let location = useLocation();
 
-    React.useEffect(() => {
-      // Google Analytics
-      console.log(location.pathname);
-    }, [location]);
+    // React.useEffect(() => {
+    //   // Google Analytics
+    //   console.log(location.pathname);
+    // }, [location]);
 
     return (
         <nav className="navbar navbar-dark navbar-expand-lg bg-dark">
