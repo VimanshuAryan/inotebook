@@ -24,18 +24,7 @@ const Navbar = () => {
                         </li>
                         <li className="nav-item">
                             <Link className={`nav-link ${location.pathname === "/about" ? "active" : ""}`} to="/about">About</Link>
-                        </li>
-                        <li className="nav-item dropdown">
-                            <Link className="nav-link dropdown-toggle" href="/" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </Link>
-                            <ul className="dropdown-menu">
-                                <li><Link className="dropdown-item" to="/">Action</Link></li>
-                                <li><Link className="dropdown-item" to="/">Another action</Link></li>
-                                <li><hr className="dropdown-divider"/></li>
-                                <li><Link className="dropdown-item" to="/">Something else here</Link></li>
-                            </ul>
-                        </li>                        
+                        </li>                       
                     </ul>
                     <form className="d-flex" role="search">
                         <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
