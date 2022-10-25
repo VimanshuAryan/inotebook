@@ -45,17 +45,7 @@ const NoteState = (props) => {
             },
             body: JSON.stringify({ title, description, tag })
         });
-        const json = response.json();
-
-        const note = {
-            "_id": "6346bce10ce19119dajb8a6b8",
-            "user": "63441381b03e3f716353fcb1",
-            "title": title,
-            "description": description,
-            "tag": tag,
-            "date": "2022-10-12T13:10:57.537Z",
-            "__v": 0
-        };
+        const note = response.json();
         setNotes(notes.concat(note));
     };
 
@@ -78,7 +68,7 @@ const NoteState = (props) => {
     const editNote = async (id, title, description, tag) => {
         // API call
         const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM0NDEzODFiMDNlM2Y3MTYzNTNmY2IxIn0sImlhdCI6MTY2NTU1OTY1NX0.zlRcRfsG4GA7311mGa_iclYyMgiCtgHWFfqgvECjm3w'
@@ -86,18 +76,19 @@ const NoteState = (props) => {
             body: JSON.stringify({ title, description, tag })
         });
         const json = response.json();
-
+        let newNotes = JSON.parse(JSON.stringify(notes))
         // logic for client
-        for (let index = 0; index < notes.length; index++) {
-            const element = notes[index];
-
+        for (let index = 0; index < newNotes.length; index++) {
+            const element = newNotes[index];
             if (element._id === id) {
-                element.title = title;
-                element.description = description;
-                element.tag = tag;
+              newNotes[index].title = title;
+              newNotes[index].description = description;
+              newNotes[index].tag = tag; 
+              break; 
             }
+          }  
+          setNotes(newNotes);
         }
-    };
 
     return (
         <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
